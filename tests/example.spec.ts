@@ -1,22 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
-
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
-
+//Test case Jhoan integracion con cards "SERVINOD-492 3er Sprint"
 test("Test Integracion", async ({ page }) => {
   await page.goto("https://devmasters-servineo-frontend-zk3q.vercel.app/es");
 
@@ -51,4 +35,33 @@ test("Test Integracion", async ({ page }) => {
 
   await card.click();
   await page.waitForTimeout(3000);
+});
+
+//Test SERVINOD-51      Verificar que al ingresar "-" entre palabras no se alteren las busquedas
+test("Test caracteres input", async ({ page }) => {
+  await page.goto("https://devmasters-servineo-frontend-zk3q.vercel.app/es");
+  await page.locator("button[type='submit']").click();
+
+  await page.waitForTimeout(3000);
+
+  await page.locator("//input[@placeholder='¿Qué servicio necesitas?']").fill("Alba------ñil");
+  await page.locator("body > div:nth-child(14) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)").click();
+  
+  await page.waitForTimeout(1000);
+
+  await page.locator("//button[@aria-label='Limpiar búsqueda']//*[name()='svg']").click();
+  //Segunda prueba
+
+  await page.locator("//input[@placeholder='¿Qué servicio necesitas?']").fill("------Albañil");
+  await page.locator("body > div:nth-child(14) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)").click();
+  
+  await page.waitForTimeout(2000);
+
+  await page.locator("//button[@aria-label='Limpiar búsqueda']//*[name()='svg']").click();
+
+  //tercera prueba
+  await page.locator("//input[@placeholder='¿Qué servicio necesitas?']").fill("Albañil------");
+  await page.locator("body > div:nth-child(14) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)").click();
+  
+  await page.waitForTimeout(2000);
 });
