@@ -1,4 +1,4 @@
-import {test, expect, Locator} from '@playwright/test';
+import {test, expect} from '@playwright/test';
 
 test.describe("Normalización de mayúsculas al buscar", () => {
 
@@ -10,6 +10,15 @@ test.describe("Normalización de mayúsculas al buscar", () => {
       try {
         //1. Ingresar a Servineo
         await page.goto('https://servineo.app/es');
+
+        //Cerrar ventana emergente si aparece
+        try {
+        await page.locator('//button[normalize-space()="No, gracias"]').click({ timeout: 5000 });
+        console.log('✓ Ventana cerrada');
+        await (2000);
+      } catch (e) {
+        console.log('✓ No hay ventana emergente');
+      }
         
         //2. Dirigirse a la sección de búsqueda
         const ofertasButton = page.locator('a, button').filter({
@@ -18,7 +27,8 @@ test.describe("Normalización de mayúsculas al buscar", () => {
         
         await expect(ofertasButton).toBeVisible();
         await ofertasButton.click();
-        
+        await (3000);
+
         //3. Buscar el parámetro electricista
         const searchInput = page.locator("//input[@placeholder='¿Que servicio necesitas?']");
         await expect(searchInput).toBeVisible();
