@@ -1,75 +1,112 @@
 import { test, expect, Page } from '@playwright/test';
 
-//Test case Jhoan integracion con cards "SERVINOD-492 3er Sprint"
+//Test case Jhoan SERVINO: Verificar que persistan las opciones seleccionadas de una seccion despues de aplicar la busqueda avanzada
 test("Test Integracion", async ({ page }) => {
-  await page.goto("https://devmasters-servineo-frontend-zk3q.vercel.app/es");
+const ciudadSeleccionada: string = "Cochabamba";
+await page.waitForTimeout(1000);
+  await page.goto("https://servineo.app/es");
+  await page.waitForTimeout(2000);
 
-  
-  await page.locator("//input[@placeholder='¿Que servicio necesitas?']").fill("Madera");
-  await page.locator("button[type='submit']").click();
+  const closeButton = page.locator("button.reactour__close-button");
+  if (await closeButton.isVisible()) {
+    await closeButton.click();
+  }
 
-  
-  const card = page.locator("//div[@class='flex flex-col gap-4']/div[2]");
+  await page.locator("a[href*='job-offer-list']").first().click();
+  await page.waitForTimeout(3000);
+
+  const card = page.locator("//div[@class='flex-shrink-0']");
   await card.waitFor();
   await card.click();
-
-  
-  await page.locator("//button[@aria-label='Cerrar modal']").click();
-
-
-  await page.locator("body > div:nth-child(14) > div:nth-child(1) > button:nth-child(1)").click();
-
- 
-  await page.locator("//body/main/div/div/div[2]/div[1]/div[1]").click();
-
-
-  await page.locator("//label[1]//div[1]//input[1]").click();
-  await page.locator("//label[2]//div[1]//input[1]").click();
-  await page.locator("//label[3]//div[1]//input[1]").click();
-
-
-  await page.locator("//button[normalize-space()='Resetear']").click();//gey hoomo eres jhoan te la comes enteriaaaaaa
-  /**
-   * *No seas tan homo ssexual
-   */
-
-  
-  await page.locator("body").click();
-
-  await card.click();
   await page.waitForTimeout(3000);
+
+  await page.locator("//div[6]//div[1]").click(); //abre ciudades
+
+  await page.locator('label', { hasText: 'Cochabamba' }).locator('input').check(); //seleccionamos
+
+  await page.locator("//button[@class='bg-[#2B6AE0] hover:bg-[#265ACC] text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors duration-300 shadow-md']").click();
+  await page.waitForTimeout(2000);
+
+  await page.getByRole('button', { name: 'Modificar' }).click();
+  await page.waitForTimeout(2000);
+
+  // Verificación importante:
+  const cochabambaCheck = page.locator('label', { hasText: 'Cochabamba' }).locator('input');
+  await expect(cochabambaCheck).toBeChecked();
+  console.log(`La ciudad: ${ciudadSeleccionada} se mantiene seleccionada`);
+
 });
 
-//Test SERVINOD-51      Verificar que al ingresar "-" entre palabras no se alteren las busquedas
-test("Test caracteres input", async ({ page }) => {
-  await page.goto("https://devmasters-servineo-frontend-zk3q.vercel.app/es");
-  await page.locator("button[type='submit']").click();
 
-  await page.waitForTimeout(3000);
+//Test SERVINOD-51    Verificar que al ingresar "-" entre palabras no se alteren las busquedas
+test("Test caracteres input (TypeScript)", async ({ page }) => {
+  const terminoEsperado: string = "Albañil";
 
-  await page.locator("//input[@placeholder='¿Qué servicio necesitas?']").fill("Alba------ñil");
-  await page.locator("body > div:nth-child(14) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)").click();
-  
+  // 1. Ingresamos al sitio
+  await page.goto("https://servineo.app/es");
+  await page.waitForTimeout(2000);
+
+  // Cerramos el popup de bienvenida si existe
+  const closeButton = page.locator("button.reactour__close-button");
+  if (await closeButton.isVisible()) {
+    await closeButton.click();
+  }
+  await page.waitForTimeout(2000);
+  // Nos dirigimos a ofertas
+  await page.locator("a[href*='job-offer-list']").first().click();
   await page.waitForTimeout(1000);
 
-  await page.locator("//button[@aria-label='Limpiar búsqueda']//*[name()='svg']").click();
-  //Segunda prueba
-
-  await page.locator("//input[@placeholder='¿Qué servicio necesitas?']").fill("------Albañil");
-  await page.locator("body > div:nth-child(14) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)").click();
+  // Selector reutilizable para el botón de búsqueda
+  // Nota: Ajusta este selector si el botón tiene un ID o clase específica mejor
+  const searchButton = page.locator("body > div:nth-child(8) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)");
   
+  // Selector reutilizable para el botón de limpiar
+  const clearButton = page.locator("//button[@aria-label='Limpiar búsqueda']//*[name()='svg']");
+
+  // --- PRUEBA 1: Intercalado ---
+  await page.getByPlaceholder('¿Qué servicio necesitas?').fill("Alba------ñil");
+  await searchButton.click();
   await page.waitForTimeout(2000);
 
-  await page.locator("//button[@aria-label='Limpiar búsqueda']//*[name()='svg']").click();
+  // ASERCIÓN 1
+  // Buscamos el H3 que contiene el título de la card
+  const titleLocator1 = page.locator("h3.text-base.font-semibold").first();
+  await expect(titleLocator1).toContainText(terminoEsperado);
+  
+  // Limpiar
+  await clearButton.click();
 
-  //tercera prueba
-  await page.locator("//input[@placeholder='¿Qué servicio necesitas?']").fill("Albañil------");
-  await page.locator("body > div:nth-child(14) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)").click();
+  // --- PRUEBA 2: Prefijo ---
+  await page.getByPlaceholder('¿Qué servicio necesitas?').fill("------Albañil");
+  await searchButton.click();
   await page.waitForTimeout(2000);
-  //Assert
-  const primeraCard = page.locator("//body/main[@class='px-4 sm:px-6 md:px-12 lg:px-24']/div[@class='w-full max-w-5xl mx-auto']/div/div[@class='flex flex-col gap-4']/div[1]");
-  await expect(primeraCard).toContainText("Albañil");
 
+  // ASERCIÓN 2
+  const titleLocator2 = page.locator("h3.text-base.font-semibold").first();
+  await expect(titleLocator2).toContainText(terminoEsperado);
 
+  // Limpiar
+  await clearButton.click();
+
+  // --- PRUEBA 3: Sufijo ---
+  await page.getByPlaceholder('¿Qué servicio necesitas?').fill("Albañil------");
+  await searchButton.click();
   await page.waitForTimeout(2000);
+
+  // --- CAPTURA Y COMPARACIÓN MANUAL (Lo que pediste) ---
+  
+  // 1. Localizamos el elemento
+  const cardTitleLocator = page.locator("h3.text-base.font-semibold").first();
+  
+  // 2. Extraemos el texto (Tipado como string | null)
+  const textoDeLaCard: string | null = await cardTitleLocator.textContent();
+  
+  // 3. Log para depuración
+  console.log(`Texto extraído: "${textoDeLaCard}"`);
+  console.log(`Parametro buscado:"${terminoEsperado}"`);
+
+  // 4. Validación estricta con TypeScript
+  // Verificamos que no sea null y contenga el texto
+  expect(textoDeLaCard).not.toBeNull();
+  expect(textoDeLaCard?.trim()).toContain(terminoEsperado);
 });
