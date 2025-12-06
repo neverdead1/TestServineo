@@ -36,15 +36,13 @@ test('Verificar que al seleccionar una fecha en el calendario de Búsqueda Avanz
     console.log('PASO 2: Hacer clic en "No, gracias".');
     try {
         const btnNoGracias = page.locator('//button[normalize-space()="No, gracias"]');
-        if (await btnNoGracias.isVisible({ timeout: 4000 })) {
-            console.log('   Publicidad detectada. Cerrando ventana...');
+        await btnNoGracias.isVisible({ timeout: 4000 });
+        console.log('   Publicidad detectada. Cerrando ventana...');
             await interactuar(page, btnNoGracias);
             await btnNoGracias.click();
-        } else {
-            console.log('   No se detectó publicidad.');
-        }
+        
     } catch (e) {
-        console.log('   Continuando flujo normal.');
+        console.log('   No se detectó publicidad.');
     }
 
     // NAVEGACIÓN A OFERTAS
