@@ -1,4 +1,8 @@
 import { test, expect, Page, Locator } from '@playwright/test';
+/**
+ * *Hecho por Willian Andres Almendras Calizaya
+ * *https://app.qase.io/case/SERVINOD-542
+ */
 
 // CONFIGURACIÓN DEL ENTORNO DE PRUEBA
 // slowMo: Agrega un retraso global para que la ejecución sea visible al ojo humano.
@@ -10,7 +14,7 @@ test.use({
     },
 });
 
-test('Verificar que el calendario de busqueda avanzada se seleccione la fecha 15/12/2025', async ({ page, browserName }) => {
+test('Verificar que al seleccionar una fecha en el calendario de Búsqueda Avanzada se autocomplete en los inputs de fecha.', async ({ page, browserName }) => {
     // Aumentamos el timeout a 60s para evitar fallos en redes lentas o navegadores pesados
     test.setTimeout(60000); 
 
@@ -18,7 +22,7 @@ test('Verificar que el calendario de busqueda avanzada se seleccione la fecha 15
 
     // PARTE 1: NAVEGACION
 
-    console.log('PASO 1: Ingresando al Home...');
+    console.log('PASO 1: Ingresar al link de la pagina');
     // page.goto espera automáticamente el evento 'load', asegurando que la página base cargó.
     await page.goto('https://servineo.app/es');
 
@@ -29,7 +33,7 @@ test('Verificar que el calendario de busqueda avanzada se seleccione la fecha 15
 
     // MANEJO DE PUBLICIDAD (Lógica condicional)
     // Usamos try-catch para dar robustez: si el modal no aparece (común en repeticiones), el test no falla.
-    console.log('PASO 2: Verificando publicidad emergente...');
+    console.log('PASO 2: Hacer clic en "No, gracias".');
     try {
         const btnNoGracias = page.locator('//button[normalize-space()="No, gracias"]');
         if (await btnNoGracias.isVisible({ timeout: 4000 })) {
@@ -44,13 +48,13 @@ test('Verificar que el calendario de busqueda avanzada se seleccione la fecha 15
     }
 
     // NAVEGACIÓN A OFERTAS
-    console.log('PASO 3: Navegando a la sección Ofertas...');
+    console.log('PASO 3: Hacer clic en la sección "Ofertas de trabajo"');
     const linkOfertas = page.locator('//a[contains(@href, "job-offer-list")]').first();
     await interactuar(page, linkOfertas);
     await linkOfertas.click();
 
     // BÚSQUEDA AVANZADA
-    console.log('PASO 4: Abriendo Búsqueda Avanzada...');
+    console.log('PASO 4: Hacer clic en el botón de "Búsqueda Avanzada"');
     const btnLupa = page.locator('button[aria-label="Go to advanced search"]');
     await interactuar(page, btnLupa);
     await btnLupa.click();
@@ -63,19 +67,19 @@ test('Verificar que el calendario de busqueda avanzada se seleccione la fecha 15
     // PARTE 2: INTERACCIÓN CON EL CALENDARIO
 
     // SELECCIÓN DE RADIO BUTTON
-    console.log('PASO 5: Seleccionando opción Fecha Específica...');
+    console.log('PASO 5: Seleccionar la opción "Fecha específica" en el filtro de fecha.');
     const radioBtn = page.locator('//input[@value="specific"]/..');
     await interactuar(page, radioBtn);
     await radioBtn.click();
 
     // ABRIR CALENDARIO
-    console.log('PASO 6: Desplegando el calendario...');
+    console.log('PASO 6: Abrir el calendario haciendo clic en el ícono del calendario.');
     const btnCalendar = page.locator('//input[@placeholder="AAAA"]/following::button[1]');
     await interactuar(page, btnCalendar);
     await btnCalendar.click();
 
     // CAMBIAR DE MES
-    console.log('PASO 7: Cambiando al mes siguiente...');
+    console.log('PASO 7: Navegar hacia el mes siguiente y seleccionar el día 15.');
     const btnNext = page.locator('//button[@aria-label="Mes siguiente"]');
     await interactuar(page, btnNext); 
     await btnNext.click();
@@ -87,7 +91,7 @@ test('Verificar que el calendario de busqueda avanzada se seleccione la fecha 15
     await dia15.click();
 
     // CONFIRMAR FECHA (Si aplica)
-    console.log('PASO 9: Confirmando selección...');
+    console.log('PASO 9: Confirmar la fecha haciendo clic en "Aceptar" (si el botón está presente).');
     try {
         const btnAceptar = page.locator('//button[normalize-space()="Aceptar"]');
         if (await btnAceptar.isVisible({ timeout: 3000 })) {
@@ -101,7 +105,7 @@ test('Verificar que el calendario de busqueda avanzada se seleccione la fecha 15
 
     // PARTE 3: VALIDACIÓN Y ASSERTIONS=
 
-    console.log('PASO 10: Validando resultado final...');
+    console.log('PASO 10: Validar que el campo de día (DD) refleja la selección realizada.');
     console.log('   Haciendo scroll hasta el final de la página...');
     await scrollHastaElFondo(page); 
 
