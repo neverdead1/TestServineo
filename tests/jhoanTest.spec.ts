@@ -28,7 +28,10 @@ test("Test Integracion", async ({ page }) => {
   await page.locator("//label[3]//div[1]//input[1]").click();
 
 
-  await page.locator("//button[normalize-space()='Resetear']").click();
+  await page.locator("//button[normalize-space()='Resetear']").click();//gey hoomo eres jhoan te la comes enteriaaaaaa
+  /**
+   * *No seas tan homo ssexual
+   */
 
   
   await page.locator("body").click();
