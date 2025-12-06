@@ -1,5 +1,6 @@
 import { test, expect, Page } from "@playwright/test";
 /////////
+//Nombre: Romane Susana Quiroga Ledezma
 //Descripción:
 // La automatización busca validar que al aplicar el filtro de nombres en el rango **A–C**, los resultados mostrados correspondan únicamente a Fixers cuyos nombres comienzan con esas letras.
 /////////
