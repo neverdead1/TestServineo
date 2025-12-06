@@ -156,11 +156,11 @@ async function moverPunteroVisual(page: Page, x: number, y: number) {
             cursor = document.createElement('div');
             cursor.id = 'playwright-cursor';
             Object.assign(cursor.style, {
-                width: '20px', height: '20px', backgroundColor: 'rgba(255, 0, 0, 0.7)',
+                width: '20px', height: '20px', backgroundColor: 'rgba(246, 92, 210, 0.92)',
                 border: '2px solid white', borderRadius: '50%', position: 'fixed',
                 zIndex: '999999', pointerEvents: 'none',
                 transition: 'top 0.1s ease-out, left 0.1s ease-out',
-                boxShadow: '0 0 10px rgba(255, 0, 0, 0.8)',
+                boxShadow: '0 0 10px rgba(175, 12, 148, 0.65)',
                 top: '-50px', left: '-50px'
             });
             document.body.appendChild(cursor);
