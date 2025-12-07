@@ -1,5 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 
+//SERVINO - ID576 - Filtro Combinado Ciudad y Calificación
+
 test('Filtro Combinado Ciudad y Calificar', async ({ page }) => {
 
     // Paso 1: Abrir página principal
