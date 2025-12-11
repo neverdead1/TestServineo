@@ -11,7 +11,7 @@ test.use({
     },
 });
 
-test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exactas" en Búsqueda Avanzada', async ({ page, browserName }) => {
+test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exactas".', async ({ page, browserName }) => {
     // Tiempo suficiente para la demo visual
     test.setTimeout(60000); 
 
@@ -20,15 +20,15 @@ test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exact
 
     console.log(`--- INICIANDO TEST EN: ${browserName.toUpperCase()} ---`);
 
-    // PARTE 1: NAVEGACIÓN DESDE HOME
+    // PARTE 1: NAVEGACION DESDE HOME
 
     console.log('PASO 1: Ingresar al link de la pagina');
     await page.goto('https://servineo.app/es');
 
     try {
-        console.log('PASO 2: Hacer clic en "No, gracias".');
+        console.log('PASO 2: Hacer clic en el boton "No, gracias".');
         const btnNoGracias = page.locator('//button[normalize-space()="No, gracias"]');
-        if (await btnNoGracias.isVisible({ timeout: 4000 })) {
+        if (await btnNoGracias.isVisible({ timeout: 5000 })) {
             await interactuar(page, btnNoGracias);
             await btnNoGracias.click();
         }
@@ -40,7 +40,7 @@ test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exact
     await interactuar(page, linkOfertas);
     await linkOfertas.click();
 
-    // Ir a Búsqueda Avanzada
+    // Ir a Busqueda Avanzada
     console.log('PASO 4: Hacer clic en el botón de "Búsqueda Avanzada"');
     const btnLupa = page.locator('button[aria-label="Go to advanced search"]');
     await interactuar(page, btnLupa);
@@ -74,8 +74,8 @@ test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exact
     // 2. Movemos el puntero rojo de vuelta al checkbox
     await moverPunteroAlCentro(page, checkPalabras);
 
-    // 3. ILUMINACIÓN VERDE DE "VERIFICADO"
-    // Le ponemos borde verde y fondo verde suave para indicar éxito
+    // 3. ILUMINACION VERDE DE "VERIFICADO"
+    // Le ponemos borde verde y fondo verde suave para indicar exito
     await checkPalabras.evaluate((node) => {
         node.style.transition = 'all 0.5s ease';
         node.style.border = '3px solid #28a745';
@@ -86,7 +86,7 @@ test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exact
     console.log('   ->CHECKBOX VERIFICADO VISUALMENTE (VERDE).');
     await page.waitForTimeout(2000);
 
-    // 4. Validación técnica real
+    // 4. Validación tecnica real
     const inputPalabras = checkPalabras.locator('input[type="checkbox"]');
     await expect(inputPalabras).not.toBeChecked();
 
@@ -105,7 +105,7 @@ async function interactuar(page: Page, locator: Locator) {
     // Mover puntero
     await moverPunteroAlCentro(page, locator);
 
-    // Efecto Neón (Azul/Cian para acciones normales)
+    // Efecto Neon (Azul/Cian para acciones normales)
     await locator.evaluate((node) => {
         node.style.transition = 'all 0.3s ease';
         node.style.outline = '3px solid #00ffcc'; 
@@ -115,7 +115,7 @@ async function interactuar(page: Page, locator: Locator) {
 }
 
 /**
- * SCROLL LENTO REAL: Baja píxel a píxel
+ * SCROLL LENTO REAL
  */
 async function scrollLentoAlElemento(page: Page, locator: Locator) {
     const box = await locator.boundingBox();
