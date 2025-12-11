@@ -11,7 +11,7 @@ test.use({
     },
 });
 
-test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exactas" en Búsqueda Avanzada', async ({ page, browserName }) => {
+test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exactas".', async ({ page, browserName }) => {
     // Tiempo suficiente para la demo visual
     test.setTimeout(60000); 
 
@@ -28,7 +28,7 @@ test('Verificar que el botón "Limpiar Datos" desmarca el filtro "Palabras Exact
     try {
         console.log('PASO 2: Hacer clic en el boton "No, gracias".');
         const btnNoGracias = page.locator('//button[normalize-space()="No, gracias"]');
-        if (await btnNoGracias.isVisible({ timeout: 4000 })) {
+        if (await btnNoGracias.isVisible({ timeout: 5000 })) {
             await interactuar(page, btnNoGracias);
             await btnNoGracias.click();
         }
