@@ -10,10 +10,9 @@ function quitarAcentos(texto: string): string {
   return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-test('Validar búsqueda con acentos', async ({ page }) => {
+test('Validar busqueda con acentos', async ({ page }) => {
   // 1. INGRESAR AL LINK
   await page.goto('https://servineo.app/es');
-
   await page.waitForTimeout(2000);
 
   // 2.CERRAR MODAL DE "Recorrido del sistema"
@@ -25,7 +24,6 @@ test('Validar búsqueda con acentos', async ({ page }) => {
   }
   // 3. Ubicar la barra de búsqueda en el home
   const campoBusqueda = page.locator('//input[@placeholder="¿Que servicio necesitas?"]');
-
   const palabra = "cérrajéró";
 
   // 4. Ingresar un texto con acentos en el campo de busqueda
@@ -39,16 +37,13 @@ test('Validar búsqueda con acentos', async ({ page }) => {
 
   // 5. Validar redirección - Visualizar la pestaña de ofertas de trabajo
   await expect(page).toHaveURL(/.*job-offer-list.*/);
-
   console.log("Redirige correctamente a página de ofertas de trabajo");
 
   // 6. Validar resultados
   //Resultado esperado: Se realiza la búsqueda trayendo los resultados con normalidad
   const resultados = page.locator('//div[@class="cursor-pointer"]');
   const count = await resultados.count();
-
   expect(count).toBeGreaterThan(0);
-
   console.log(`Se encontraron ${count} resultados para '${palabra}'`);
   await page.waitForTimeout(8000);
 });
